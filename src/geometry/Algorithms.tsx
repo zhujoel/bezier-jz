@@ -12,3 +12,25 @@ export function DeCasteljau(points: Point[], t: number): Point {
     }
     return p;
 }
+
+/**
+ * Get all points to represent a line from p0 to p1.
+ */
+export function Line(p0: Point, p1: Point, step?: number | undefined): Point[] {
+    const definedStep = step ?? 0.01;
+
+    // FIXME:
+
+    const points = [];
+    for (var t = 0; t <= 1; t = Add(t, definedStep)) {
+        points.push(LinearInterpolation(p0, p1, t));
+    }
+    return points;
+}
+
+/**
+ * For rounding issues on decimals
+ */
+function Add(a: number, b: number): number {
+    return parseFloat((a + b).toFixed(6));
+}

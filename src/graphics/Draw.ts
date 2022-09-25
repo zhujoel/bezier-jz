@@ -4,11 +4,16 @@ function drawPoint(point: Point, ctx: CanvasRenderingContext2D){
     ctx.strokeRect(point.x, point.y, 1, 1);
 }
 
+type DrawOptions = {
+    delay: number;
+}
+
 /**
  * Draw a list of points sequentially.
  * @param points Points to draw.
+ * @param options 
  */
-export function drawPoints(points: Point[], ctx: CanvasRenderingContext2D){
+export function drawPoints(points: Point[], ctx: CanvasRenderingContext2D, options?: DrawOptions | undefined){
     var promise = Promise.resolve();
 
     points.forEach((p) => {
@@ -16,7 +21,7 @@ export function drawPoints(points: Point[], ctx: CanvasRenderingContext2D){
             () =>
                 new Promise((resolve) => {
                     drawPoint(p, ctx);
-                    setTimeout(resolve, 100);
+                    setTimeout(resolve, options?.delay ?? 0);
                 })
         );
     });

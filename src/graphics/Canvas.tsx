@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { Line } from "../geometry/Algorithms";
 import { Point } from "../geometry/Point";
 import { clear, drawPoints } from "./Draw";
 
@@ -21,12 +22,25 @@ export default function Canvas(props: CanvasProps) {
     return (
         <div>
             <canvas ref={canvasRef} width={width} height={height} />
+            <br />
             <button
                 onClick={() =>
-                    drawPoints(generatePoints(100, width, height), context)
+                    drawPoints(generatePoints(100, width, height), context, {
+                        delay: 10,
+                    })
                 }
             >
-                Draw random
+                Draw random points
+            </button>
+            <button
+                onClick={() =>
+                    drawPoints(
+                        Line(new Point(0, 0), new Point(100, 100)),
+                        context
+                    )
+                }
+            >
+                Draw random line
             </button>
             <button onClick={() => clear(context)}>Clear</button>
         </div>
