@@ -6,7 +6,7 @@ export default function App() {
         <div className="App">
             Hello world, here is my canvas:
             <br />
-            <Canvas />
+            <Canvas height={500} width={500} />
         </div>
     );
 }

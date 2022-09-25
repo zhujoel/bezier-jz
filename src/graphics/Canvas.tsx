@@ -1,24 +1,42 @@
 import React, { useEffect, useRef } from "react";
 import { Point } from "../geometry/Point";
+import { clear, drawPoints } from "./Draw";
 
-export default function Canvas() {
+export type CanvasProps = {
+    width: number;
+    height: number;
+};
+
+export default function Canvas(props: CanvasProps) {
+    const { width, height } = props;
+
+    // Initialize canvas and context
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    const p1 = new Point(50, 50);
-    const p2 = new Point(100, 150);
-
-    const draw = (ctx: CanvasRenderingContext2D) => {
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-    };
-
+    var context: CanvasRenderingContext2D;
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const context: CanvasRenderingContext2D = canvas.getContext("2d");
-        draw(context);
-    }, [draw]);
+        // canvas is only defined after rendering
+        context = canvasRef.current.getContext("2d");
+    }, []);
 
-    return <canvas ref={canvasRef} width="200" height="200" />;
+    return (
+        <div>
+            <canvas ref={canvasRef} width={width} height={height} />
+            <button
+                onClick={() =>
+                    drawPoints(generatePoints(100, width, height), context)
+                }
+            >
+                Draw random
+            </button>
+            <button onClick={() => clear(context)}>Clear</button>
+        </div>
+    );
+}
+
+function generatePoints(amount: number, width: number, height: number) {
+    const points: Point[] = [];
+    for (var i = 0; i < amount; ++i) {
+        points.push(new Point(Math.random() * width, Math.random() * height));
+    }
+    return points;
 }
