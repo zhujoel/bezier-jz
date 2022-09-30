@@ -6,29 +6,36 @@ export function Lerp(p0: Point, p1: Point, t: number): Point {
 }
 
 export function DeCasteljau(points: Point[], t: number): Point {
-    var p = points[0];
-    for (var i = 1; i < points.length; ++i) {
-        p = Lerp(p, points[i], t);
+    if (points.length === 0) {
+        throw new Error("Unable to compute on no point"); // Error state: should not happen
     }
-    return p;
+    if (points.length === 1) {
+        return points[0];
+    }
+    const lerps = [];
+    for (var i = 1; i < points.length; ++i) {
+        lerps.push(Lerp(points[i - 1], points[i], t));
+    }
+    return DeCasteljau(lerps, t);
 }
 
 /**
- * Get points from two control points p0 and p1 at a given step.
- * A linear bézier curve is a straight line.
+ * Computes all points in a Bézier curve using any number of control points and a given step between each point.
+ * @param points Control points of a Bézier curve. The curve is guaranteed to start at the first given point and finish at the last given point.
+ * @param step Step between each points in the curve.
+ * @returns All points of the curve.
  */
-export function Linear(
-    p0: Point,
-    p1: Point,
+export function BezierCurve(
+    points: Point[],
     step?: number | undefined
 ): Point[] {
     const definedStep = step ?? 0.01;
-
-    const points = [];
+    const bezier = [];
     for (var t = 0; t <= 1; t = Add(t, definedStep)) {
-        points.push(Lerp(p0, p1, t));
+        const p = DeCasteljau(points, t);
+        bezier.push(p);
     }
-    return points;
+    return bezier;
 }
 
 /**

@@ -27,6 +27,6 @@ export function drawPoints(points: Point[], ctx: CanvasRenderingContext2D, optio
     });
 }
 
-export function clear(ctx: CanvasRenderingContext2D){
-    ctx.clearRect(0, 0, 1000, 1000);
+export function clear(width: number, height: number, ctx: CanvasRenderingContext2D){
+    ctx.clearRect(0, 0, width, height);
 }

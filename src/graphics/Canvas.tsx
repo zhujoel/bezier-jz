@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Linear } from "../geometry/Bezier";
+import { BezierCurve } from "../geometry/Bezier";
 import { Point } from "../geometry/Point";
 import { clear, drawPoints } from "./Draw";
 
@@ -21,36 +21,34 @@ export default function Canvas(props: CanvasProps) {
 
     return (
         <div>
-            <canvas ref={canvasRef} width={width} height={height} />
-            <br />
-            <button
-                onClick={() =>
-                    drawPoints(generatePoints(100, width, height), context, {
-                        delay: 10,
-                    })
-                }
-            >
-                Draw random points
-            </button>
-            <button
-                onClick={() =>
-                    drawPoints(
-                        Linear(new Point(0, 0), new Point(100, 100)),
-                        context
-                    )
-                }
-            >
-                Draw random line
-            </button>
-            <button onClick={() => clear(context)}>Clear</button>
+            <div>
+                <button
+                    onClick={() =>
+                        drawPoints(
+                            BezierCurve(
+                                [
+                                    new Point(50, 50),
+                                    new Point(150, 150),
+                                    new Point(50, 350),
+                                ],
+                                0.1
+                            ),
+                            context
+                        )
+                    }
+                >
+                    Draw
+                </button>
+                <button onClick={() => clear(width, height, context)}>
+                    Clear
+                </button>
+            </div>
+            <canvas
+                style={{ backgroundColor: "lightblue" }}
+                ref={canvasRef}
+                width={width}
+                height={height}
+            />
         </div>
     );
-}
-
-function generatePoints(amount: number, width: number, height: number) {
-    const points: Point[] = [];
-    for (var i = 0; i < amount; ++i) {
-        points.push(new Point(Math.random() * width, Math.random() * height));
-    }
-    return points;
 }

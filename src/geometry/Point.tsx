@@ -13,10 +13,6 @@ export class Point {
         return new Point(this.x * n, this.y * n);
     }
 
-    Plus(n: number): Point {
-        return new Point(this.x + n, this.y + n);
-    }
-
     Add(p: Point): Point {
         return new Point(this.x + p.x, this.y + p.y);
     }
