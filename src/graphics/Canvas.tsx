@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Line } from "../geometry/Algorithms";
+import { Linear } from "../geometry/Bezier";
 import { Point } from "../geometry/Point";
 import { clear, drawPoints } from "./Draw";
 
@@ -35,7 +35,7 @@ export default function Canvas(props: CanvasProps) {
             <button
                 onClick={() =>
                     drawPoints(
-                        Line(new Point(0, 0), new Point(100, 100)),
+                        Linear(new Point(0, 0), new Point(100, 100)),
                         context
                     )
                 }

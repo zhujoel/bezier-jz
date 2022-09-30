@@ -1,29 +1,32 @@
 import React from "react";
 import { Point } from "./Point";
 
-export function LinearInterpolation(p0: Point, p1: Point, t: number): Point {
+export function Lerp(p0: Point, p1: Point, t: number): Point {
     return p0.Times(1 - t).Add(p1.Times(t));
 }
 
 export function DeCasteljau(points: Point[], t: number): Point {
     var p = points[0];
     for (var i = 1; i < points.length; ++i) {
-        p = LinearInterpolation(p, points[i], t);
+        p = Lerp(p, points[i], t);
     }
     return p;
 }
 
 /**
- * Get all points to represent a line from p0 to p1.
+ * Get points from two control points p0 and p1 at a given step.
+ * A linear bézier curve is a straight line.
  */
-export function Line(p0: Point, p1: Point, step?: number | undefined): Point[] {
+export function Linear(
+    p0: Point,
+    p1: Point,
+    step?: number | undefined
+): Point[] {
     const definedStep = step ?? 0.01;
-
-    // FIXME:
 
     const points = [];
     for (var t = 0; t <= 1; t = Add(t, definedStep)) {
-        points.push(LinearInterpolation(p0, p1, t));
+        points.push(Lerp(p0, p1, t));
     }
     return points;
 }
