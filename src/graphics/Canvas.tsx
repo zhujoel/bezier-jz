@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point } from "../geometry/Point";
-import { clear, drawPoints } from "./Draw";
+import { clear, drawPoint, drawPoints } from "./Draw";
 
 export type CanvasProps = {
     width: number;
@@ -11,37 +11,36 @@ export type CanvasProps = {
 export default function Canvas(props: CanvasProps) {
     const { width, height } = props;
 
-    // Initialize canvas and context
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    var context: CanvasRenderingContext2D;
+    const context = () => canvasRef.current.getContext("2d");
     useEffect(() => {
-        // canvas is only defined after rendering
-        context = canvasRef.current.getContext("2d");
+        canvasRef.current.addEventListener(
+            "click",
+            (e: MouseEvent) => {
+                drawPoint(new Point(e.offsetX, e.offsetY), context());
+                controlPoints.current.push(new Point(e.offsetX, e.offsetY));
+            },
+            true
+        );
     }, []);
+
+    const controlPoints = useRef<Point[]>([]);
+
+    function onClear() {
+        clear(width, height, context());
+        controlPoints.current = [];
+    }
+
+    function onDraw() {
+        drawPoints(BezierCurve(controlPoints.current, 0.002), context());
+        controlPoints.current = [];
+    }
 
     return (
         <div>
             <div>
-                <button
-                    onClick={() =>
-                        drawPoints(
-                            BezierCurve(
-                                [
-                                    new Point(50, 50),
-                                    new Point(150, 150),
-                                    new Point(50, 350),
-                                ],
-                                0.1
-                            ),
-                            context
-                        )
-                    }
-                >
-                    Draw
-                </button>
-                <button onClick={() => clear(width, height, context)}>
-                    Clear
-                </button>
+                <button onClick={onDraw}>Draw</button>
+                <button onClick={onClear}>Clear</button>
             </div>
             <canvas
                 style={{ backgroundColor: "lightblue" }}
