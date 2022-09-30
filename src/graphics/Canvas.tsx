@@ -14,17 +14,17 @@ export default function Canvas(props: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const context = () => canvasRef.current.getContext("2d");
     useEffect(() => {
-        canvasRef.current.addEventListener(
-            "click",
-            (e: MouseEvent) => {
-                drawPoint(new Point(e.offsetX, e.offsetY), context());
-                controlPoints.current.push(new Point(e.offsetX, e.offsetY));
-            },
-            true
+        canvasRef.current.addEventListener("click", (e: MouseEvent) =>
+            onClick(e.offsetX, e.offsetY)
         );
     }, []);
 
     const controlPoints = useRef<Point[]>([]);
+
+    function onClick(x: number, y: number) {
+        drawPoint(new Point(x, y), context());
+        controlPoints.current.push(new Point(x, y));
+    }
 
     function onClear() {
         clear(width, height, context());
@@ -32,7 +32,7 @@ export default function Canvas(props: CanvasProps) {
     }
 
     function onDraw() {
-        drawPoints(BezierCurve(controlPoints.current, 0.002), context());
+        drawPoints(BezierCurve(controlPoints.current, 0.005), context());
         controlPoints.current = [];
     }
 
