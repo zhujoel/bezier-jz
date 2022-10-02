@@ -1,7 +1,7 @@
-import { Point2D } from "../../geometry/2d/Point2D";
-import { Lerp, DeCasteljau, BezierCurve } from "../../geometry/2d/Bezier2D"
+import { BezierCurve, DeCasteljau, Lerp } from "../../../geometry/2d/Bezier2D";
+import { Point2D } from "../../../geometry/2d/Point2D";
 
-describe('Algorithms', () => {
+describe('Bézier 2D', () => {
   it.each`
     p0 | p1 | t | result
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0} | ${new Point2D(3, 2)}
