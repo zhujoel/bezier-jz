@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point2D } from "../geometry/Point2D";
-import { clear, drawPoint, drawPoints } from "./Draw";
+import { clear, drawPoint2D, drawPoints2D } from "./Draw";
 import ThreeCanvas from "./ThreeCanvas";
+import TwoCanvas from "./TwoCanvas";
 
 export type CanvasProps = {
     width: number;
@@ -14,52 +15,52 @@ export default function Canvas(props: CanvasProps) {
 
     const [isTwoDimensional, setIsTwoDimensional] = useState<boolean>(true);
 
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const context = () => canvasRef.current.getContext("2d");
-    useEffect(() => {
-        canvasRef.current.addEventListener("click", (e: MouseEvent) =>
-            onClick(e.offsetX, e.offsetY)
-        );
-    }, []);
-
-    const controlPoints = useRef<Point2D[]>([]);
-
-    function onClick(x: number, y: number) {
-        drawPoint(new Point2D(x, y), context());
-        controlPoints.current.push(new Point2D(x, y));
-    }
-
-    function onClear() {
-        clear(width, height, context());
-        controlPoints.current = [];
-    }
-
-    function onDraw() {
-        drawPoints(
-            BezierCurve(controlPoints.current, 0.005) as Point2D[],
-            context()
-        );
-        controlPoints.current = [];
-    }
+    const onDraw = useRef<() => void>();
+    const onClear = useRef<() => void>();
 
     return (
         <div>
             <div>
-                <button onClick={onDraw}>Draw</button>
-                <button onClick={onClear}>Clear</button>
+                <button
+                    onClick={() => {
+                        onDraw.current();
+                    }}
+                >
+                    Draw
+                </button>
+                <button
+                    onClick={() => {
+                        onClear.current();
+                    }}
+                >
+                    Clear
+                </button>
                 <button onClick={() => setIsTwoDimensional(!isTwoDimensional)}>
                     2D
                 </button>
             </div>
             {isTwoDimensional ? (
-                <canvas
-                    style={{ backgroundColor: "lightblue" }}
-                    ref={canvasRef}
+                <TwoCanvas
                     width={width}
                     height={height}
+                    setOnDraw={(newOnDraw: () => void) =>
+                        (onDraw.current = newOnDraw)
+                    }
+                    setOnClear={(newOnClear: () => void) =>
+                        (onClear.current = newOnClear)
+                    }
                 />
             ) : (
-                <ThreeCanvas />
+                <ThreeCanvas
+                    width={width}
+                    height={height}
+                    setOnDraw={(newOnDraw: () => void) =>
+                        (onDraw.current = newOnDraw)
+                    }
+                    setOnClear={(newOnClear: () => void) =>
+                        (onClear.current = newOnClear)
+                    }
+                />
             )}
         </div>
     );

@@ -3,9 +3,19 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point3D } from "../geometry/Point3D";
+import { drawPoint3D, drawPoints3D } from "./Draw";
 
-/** ThreeJS */
-export default function ThreeCanvas() {
+export type ThreeCanvasProps = {
+    width: number;
+    height: number;
+    setOnDraw: (draw: () => void) => void;
+    setOnClear: (clear: () => void) => void;
+};
+
+/** 3D Canvas */
+export default function ThreeCanvas(props: ThreeCanvasProps) {
+    const { width, height, setOnDraw, setOnClear } = props;
+
     // Added points
     const controlPoints = useRef<Point3D[]>([]);
 
@@ -68,28 +78,10 @@ export default function ThreeCanvas() {
                 intersects[0].point.y,
                 intersects[0].point.z
             );
-            drawPoint(point, scene);
+            drawPoint3D(point, scene);
             controlPoints.current.push(point);
         }
     });
-
-    function drawPoint(point: Point3D, scene: THREE.Scene) {
-        scene.add(SphereMesh(point.x, point.y, point.z));
-    }
-
-    function drawPoints(points: Point3D[], scene: THREE.Scene) {
-        for (var i = 0; i < points.length; ++i) {
-            drawPoint(points[i], scene);
-        }
-    }
-
-    function onDraw(scene: THREE.Scene) {
-        drawPoints(
-            BezierCurve(controlPoints.current, 0.005) as Point3D[],
-            scene
-        );
-        controlPoints.current = [];
-    }
 
     const animate = function () {
         requestAnimationFrame(animate);
@@ -97,26 +89,17 @@ export default function ThreeCanvas() {
     };
     animate();
 
+    setOnDraw(() => {
+        drawPoints3D(
+            BezierCurve(controlPoints.current, 0.01) as Point3D[],
+            scene
+        );
+        controlPoints.current = [];
+    });
+
     return (
         <div>
-            <button onClick={() => onDraw(scene)}>Draw 3D</button>
             <div id="threeCanvas" />
         </div>
     );
-}
-
-function SphereMesh(x: number, y: number, z: number): THREE.Mesh {
-    const circle = new THREE.Mesh(
-        new THREE.SphereGeometry(),
-        new THREE.MeshBasicMaterial({
-            color: 0x000000,
-        })
-    );
-    circle.position.x = x;
-    circle.position.y = y;
-    circle.position.z = z;
-    circle.scale.x = 0.01;
-    circle.scale.y = 0.01;
-    circle.scale.z = 0.01;
-    return circle;
 }
