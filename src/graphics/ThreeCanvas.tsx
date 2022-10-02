@@ -1,9 +1,11 @@
 import React from "react";
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default function ThreeCanvas() {
     /** ThreeJS */
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color("lightblue");
     const camera = new THREE.PerspectiveCamera(
         75,
         window.innerWidth / window.innerHeight,
@@ -15,16 +17,24 @@ export default function ThreeCanvas() {
     document.body.appendChild(renderer.domElement);
 
     const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
+    const material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.25,
+    });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    camera.position.z = 5;
+    camera.position.z = 2;
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    const axesHelper = new THREE.AxesHelper(5);
+    scene.add(axesHelper);
+    controls.update();
 
     const animate = function () {
         requestAnimationFrame(animate);
-        cube.rotation.x += 0.02;
-        cube.rotation.y += 0.02;
+
+        controls.update();
         renderer.render(scene, camera);
     };
     animate();
