@@ -97,9 +97,5 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
         controlPoints.current = [];
     });
 
-    return (
-        <div>
-            <div id="threeCanvas" />
-        </div>
-    );
+    return <div id="threeCanvas" />;
 }

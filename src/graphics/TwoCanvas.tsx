@@ -43,13 +43,11 @@ export default function TwoCanvas(props: TwoCanvasProps) {
     });
 
     return (
-        <>
-            <canvas
-                style={{ backgroundColor: "lightblue" }}
-                ref={canvasRef}
-                width={width}
-                height={height}
-            />
-        </>
+        <canvas
+            style={{ backgroundColor: "lightblue" }}
+            ref={canvasRef}
+            width={width}
+            height={height}
+        />
     );
 }
