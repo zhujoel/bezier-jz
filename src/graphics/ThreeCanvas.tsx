@@ -41,7 +41,7 @@ export default function ThreeCanvas() {
     // Raycaster
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    document.addEventListener("pointermove", (e: MouseEvent) => {
+    document.addEventListener("click", (e: MouseEvent) => {
         pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
         pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
     });
@@ -52,12 +52,28 @@ export default function ThreeCanvas() {
         raycaster.setFromCamera(pointer, camera);
         const intersects = raycaster.intersectObject(cube, false);
 
+        // Act
         if (intersects.length > 0) {
             // needs casting with Typescript: https://stackoverflow.com/questions/66818245/three-js-property-material-does-not-exist-on-type-object3d-error-when-get
-            (
-                (intersects[0].object as THREE.Mesh)
-                    .material as THREE.MeshBasicMaterial
-            ).color.set(new THREE.Color(Math.random() * 0xffffff));
+            // (
+            //     (intersects[0].object as THREE.Mesh)
+            //         .material as THREE.MeshBasicMaterial
+            // ).color.set(new THREE.Color(Math.random() * 0xffffff));
+            // Create cube
+            const newCube = new THREE.Mesh(
+                new THREE.BoxGeometry(),
+                new THREE.MeshBasicMaterial({
+                    color: 0xffffff * Math.random(),
+                })
+            );
+            newCube.position.x = Math.random();
+            newCube.position.y = Math.random();
+            newCube.position.z = Math.random();
+            newCube.scale.x = 0.01;
+            newCube.scale.y = 0.01;
+            newCube.scale.z = 0.01;
+
+            scene.add(newCube);
         }
 
         // controls.update();
