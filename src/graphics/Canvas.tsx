@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BezierCurve } from "../geometry/Bezier";
-import { Point } from "../geometry/Point";
+import { BezierCurve } from "../geometry/2d/Bezier2D";
+import { Point2D } from "../geometry/2d/Point2D";
 import { clear, drawPoint, drawPoints } from "./Draw";
+import ThreeCanvas from "./ThreeCanvas";
 
 export type CanvasProps = {
     width: number;
@@ -11,6 +12,8 @@ export type CanvasProps = {
 export default function Canvas(props: CanvasProps) {
     const { width, height } = props;
 
+    const [isTwoDimensional, setIsTwoDimensional] = useState<boolean>(true);
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const context = () => canvasRef.current.getContext("2d");
     useEffect(() => {
@@ -19,11 +22,11 @@ export default function Canvas(props: CanvasProps) {
         );
     }, []);
 
-    const controlPoints = useRef<Point[]>([]);
+    const controlPoints = useRef<Point2D[]>([]);
 
     function onClick(x: number, y: number) {
-        drawPoint(new Point(x, y), context());
-        controlPoints.current.push(new Point(x, y));
+        drawPoint(new Point2D(x, y), context());
+        controlPoints.current.push(new Point2D(x, y));
     }
 
     function onClear() {
@@ -41,13 +44,20 @@ export default function Canvas(props: CanvasProps) {
             <div>
                 <button onClick={onDraw}>Draw</button>
                 <button onClick={onClear}>Clear</button>
+                <button onClick={() => setIsTwoDimensional(!isTwoDimensional)}>
+                    2D
+                </button>
             </div>
-            <canvas
-                style={{ backgroundColor: "lightblue" }}
-                ref={canvasRef}
-                width={width}
-                height={height}
-            />
+            {isTwoDimensional ? (
+                <canvas
+                    style={{ backgroundColor: "lightblue" }}
+                    ref={canvasRef}
+                    width={width}
+                    height={height}
+                />
+            ) : (
+                <ThreeCanvas />
+            )}
         </div>
     );
 }
