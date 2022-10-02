@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { CubeCamera } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point3D } from "../geometry/Point3D";
@@ -18,6 +19,7 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
 
     // Added points
     const controlPoints = useRef<Point3D[]>([]);
+    const clicked = useRef<boolean>(false);
 
     // Scene
     const scene = new THREE.Scene();
@@ -81,17 +83,24 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
                 );
                 drawPoint3D(point, scene);
                 controlPoints.current.push(point);
+                clicked.current = true;
             }
         });
+
+        // Animate the canvas
+        function animate() {
+            requestAnimationFrame(animate);
+            if (clicked.current === false) {
+                cube.rotateX(0.01);
+                cube.rotateY(0.01);
+                edges.rotateX(0.01);
+                edges.rotateY(0.01);
+            }
+            renderer.render(scene, camera);
+        }
+        animate();
     }
     intializeScene();
-
-    // Animate the canvas
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
 
     setOnDraw(() => {
         drawObjectsAnimated<Point3D>(
@@ -103,6 +112,7 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
 
     setOnClear(() => {
         scene.clear();
+        clicked.current = false;
         intializeScene();
         controlPoints.current = [];
     });
