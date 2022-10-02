@@ -34,6 +34,10 @@ export default function ThreeCanvas() {
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
+    controls.mouseButtons = {
+        RIGHT: THREE.MOUSE.ROTATE,
+    };
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
     controls.update();
@@ -44,42 +48,43 @@ export default function ThreeCanvas() {
     document.addEventListener("click", (e: MouseEvent) => {
         pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
         pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    });
-
-    const animate = function () {
-        requestAnimationFrame(animate);
 
         raycaster.setFromCamera(pointer, camera);
         const intersects = raycaster.intersectObject(cube, false);
 
         // Act
         if (intersects.length > 0) {
-            // needs casting with Typescript: https://stackoverflow.com/questions/66818245/three-js-property-material-does-not-exist-on-type-object3d-error-when-get
-            // (
-            //     (intersects[0].object as THREE.Mesh)
-            //         .material as THREE.MeshBasicMaterial
-            // ).color.set(new THREE.Color(Math.random() * 0xffffff));
-            // Create cube
-            const newCube = new THREE.Mesh(
-                new THREE.BoxGeometry(),
-                new THREE.MeshBasicMaterial({
-                    color: 0xffffff * Math.random(),
-                })
+            scene.add(
+                SphereMesh(
+                    intersects[0].point.x,
+                    intersects[0].point.y,
+                    intersects[0].point.z
+                )
             );
-            newCube.position.x = Math.random();
-            newCube.position.y = Math.random();
-            newCube.position.z = Math.random();
-            newCube.scale.x = 0.01;
-            newCube.scale.y = 0.01;
-            newCube.scale.z = 0.01;
-
-            scene.add(newCube);
         }
+    });
 
-        // controls.update();
+    const animate = function () {
+        requestAnimationFrame(animate);
         renderer.render(scene, camera);
     };
     animate();
 
     return <></>;
+}
+
+function SphereMesh(x: number, y: number, z: number): THREE.Mesh {
+    const circle = new THREE.Mesh(
+        new THREE.SphereGeometry(),
+        new THREE.MeshBasicMaterial({
+            color: 0xffffff * Math.random(),
+        })
+    );
+    circle.position.x = x;
+    circle.position.y = y;
+    circle.position.z = z;
+    circle.scale.x = 0.01;
+    circle.scale.y = 0.01;
+    circle.scale.z = 0.01;
+    return circle;
 }
