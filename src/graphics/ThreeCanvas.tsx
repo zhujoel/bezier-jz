@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { CubeCamera } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point3D } from "../geometry/Point3D";
