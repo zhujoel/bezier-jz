@@ -11,6 +11,8 @@ export type CanvasProps = {
 export default function Canvas(props: CanvasProps) {
     const { width, height } = props;
 
+    const [isTwoDimensional, setIsTwoDimensional] = useState<boolean>(true);
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const context = () => canvasRef.current.getContext("2d");
     useEffect(() => {
@@ -41,13 +43,20 @@ export default function Canvas(props: CanvasProps) {
             <div>
                 <button onClick={onDraw}>Draw</button>
                 <button onClick={onClear}>Clear</button>
+                <button onClick={() => setIsTwoDimensional(!isTwoDimensional)}>
+                    2D
+                </button>
             </div>
-            <canvas
-                style={{ backgroundColor: "lightblue" }}
-                ref={canvasRef}
-                width={width}
-                height={height}
-            />
+            {isTwoDimensional ? (
+                <canvas
+                    style={{ backgroundColor: "lightblue" }}
+                    ref={canvasRef}
+                    width={width}
+                    height={height}
+                />
+            ) : (
+                <div> </div>
+            )}
         </div>
     );
 }
