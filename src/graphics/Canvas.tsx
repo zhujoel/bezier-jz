@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BezierCurve } from "../geometry/Bezier";
-import { Point } from "../geometry/Point";
+import { BezierCurve } from "../geometry/2d/Bezier2D";
+import { Point2D } from "../geometry/2d/Point2D";
 import { clear, drawPoint, drawPoints } from "./Draw";
 import ThreeCanvas from "./ThreeCanvas";
 
@@ -22,11 +22,11 @@ export default function Canvas(props: CanvasProps) {
         );
     }, []);
 
-    const controlPoints = useRef<Point[]>([]);
+    const controlPoints = useRef<Point2D[]>([]);
 
     function onClick(x: number, y: number) {
-        drawPoint(new Point(x, y), context());
-        controlPoints.current.push(new Point(x, y));
+        drawPoint(new Point2D(x, y), context());
+        controlPoints.current.push(new Point2D(x, y));
     }
 
     function onClear() {
