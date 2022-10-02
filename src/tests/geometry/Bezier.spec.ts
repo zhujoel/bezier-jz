@@ -12,7 +12,7 @@ describe('Bézier', () => {
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0.8} | ${new Point2D(4.6, 5.2)}
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0.9} | ${new Point2D(4.8, 5.6)}
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${1} | ${new Point2D(5, 6)}
-  `('should compute a lerp', ({ p0, p1, t, result }) => {
+  `('should compute a lerp on 2D points', ({ p0, p1, t, result }) => {
     const lerp = Lerp(p0, p1, t) as Point2D;
     expect(lerp.x).toBeCloseTo(result.x, 6);
     expect(lerp.y).toBeCloseTo(result.y, 6);
@@ -22,7 +22,7 @@ describe('Bézier', () => {
     p0 | p1 | t | result
     ${new Point3D(3, 2, 0)} | ${new Point3D(5, 6, 0)} | ${1} | ${new Point3D(5, 6, 0)}
     ${new Point3D(3, 2, 1)} | ${new Point3D(5, 6, 4)} | ${0.5} | ${new Point3D(4, 4, 2.5)}
-  `('should compute a lerp', ({ p0, p1, t, result }) => {
+  `('should compute a lerp on 3D points', ({ p0, p1, t, result }) => {
     const lerp = Lerp(p0, p1, t) as Point3D;
     expect(lerp.x).toBeCloseTo(result.x, 6);
     expect(lerp.y).toBeCloseTo(result.y, 6);

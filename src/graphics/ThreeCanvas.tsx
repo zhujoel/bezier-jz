@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
@@ -25,7 +25,7 @@ export default function ThreeCanvas() {
     // Renderer
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    document.body.replaceChild(renderer.domElement, document.body.lastChild);
 
     // Cube
     const geometry = new THREE.BoxGeometry();
@@ -48,9 +48,8 @@ export default function ThreeCanvas() {
     controls.mouseButtons = {
         RIGHT: THREE.MOUSE.ROTATE,
     };
-    const axesHelper = new THREE.AxesHelper(5);
+    const axesHelper = new THREE.AxesHelper(1);
     scene.add(axesHelper);
-    controls.update();
 
     // Raycaster
     const raycaster = new THREE.Raycaster();
@@ -101,6 +100,7 @@ export default function ThreeCanvas() {
     return (
         <div>
             <button onClick={() => onDraw(scene)}>Draw 3D</button>
+            <div id="threeCanvas" />
         </div>
     );
 }
