@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point2D } from "../geometry/Point2D";
-import { clear, drawPoint2D, drawPoints2D } from "./Draw";
+import { drawObjectsAnimated, drawPoint2D } from "./Draw";
 
 export type TwoCanvasProps = {
     width: number;
@@ -30,14 +30,14 @@ export default function TwoCanvas(props: TwoCanvasProps) {
     }
 
     setOnClear(() => {
-        clear(width, height, context());
+        context().clearRect(0, 0, width, height);
         controlPoints.current = [];
     });
 
     setOnDraw(() => {
-        drawPoints2D(
+        drawObjectsAnimated<Point2D>(
             BezierCurve(controlPoints.current, 0.005) as Point2D[],
-            context()
+            (point) => drawPoint2D(point, context())
         );
         controlPoints.current = [];
     });

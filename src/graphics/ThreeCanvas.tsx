@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point3D } from "../geometry/Point3D";
-import { drawPoint3D, drawPoints3D } from "./Draw";
+import { drawObjectsAnimated, drawPoint3D } from "./Draw";
 
 export type ThreeCanvasProps = {
     width: number;
@@ -86,6 +86,7 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
     }
     intializeScene();
 
+    // Animate the canvas
     function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
@@ -93,9 +94,9 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
     animate();
 
     setOnDraw(() => {
-        drawPoints3D(
+        drawObjectsAnimated<Point3D>(
             BezierCurve(controlPoints.current, 0.01) as Point3D[],
-            scene
+            (point) => drawPoint3D(point, scene)
         );
         controlPoints.current = [];
     });
