@@ -1,7 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { BezierCurve } from "../geometry/Bezier";
-import { Point2D } from "../geometry/Point2D";
-import { clear, drawPoint2D, drawPoints2D } from "./Draw";
+import React, { useRef, useState } from "react";
 import ThreeCanvas from "./ThreeCanvas";
 import TwoCanvas from "./TwoCanvas";
 

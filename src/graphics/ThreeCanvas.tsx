@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
@@ -24,69 +24,70 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
     scene.background = new THREE.Color("lightblue");
 
     // Camera
-    const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-    );
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.z = 2;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
     document.body.replaceChild(renderer.domElement, document.body.lastChild);
 
-    // Cube
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.25,
-    });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    // Edges of the cube
-    const edgesGeometry = new THREE.EdgesGeometry(geometry);
-    const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-    const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
-    scene.add(edges);
+    function intializeScene() {
+        // XYZ Axis
+        const axesHelper = new THREE.AxesHelper(1);
+        scene.add(axesHelper);
 
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enablePan = false;
-    controls.mouseButtons = {
-        RIGHT: THREE.MOUSE.ROTATE,
-    };
-    const axesHelper = new THREE.AxesHelper(1);
-    scene.add(axesHelper);
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enablePan = false;
+        controls.mouseButtons = {
+            RIGHT: THREE.MOUSE.ROTATE,
+        };
 
-    // Raycaster
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    document.addEventListener("click", (e: MouseEvent) => {
-        pointer.x = (e.offsetX / window.innerWidth) * 2 - 1;
-        pointer.y = -(e.offsetY / window.innerHeight) * 2 + 1;
+        // Cube
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.25,
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
 
-        raycaster.setFromCamera(pointer, camera);
-        const intersects = raycaster.intersectObject(cube, false);
+        // Edges of the cube
+        const edgesGeometry = new THREE.EdgesGeometry(geometry);
+        const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+        const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+        scene.add(edges);
 
-        // Act
-        if (intersects.length > 0) {
-            const point = new Point3D(
-                intersects[0].point.x,
-                intersects[0].point.y,
-                intersects[0].point.z
-            );
-            drawPoint3D(point, scene);
-            controlPoints.current.push(point);
-        }
-    });
+        // Raycaster to detect mouse collision with cube
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        document.addEventListener("click", (e: MouseEvent) => {
+            pointer.x = (e.offsetX / width) * 2 - 1;
+            pointer.y = -(e.offsetY / height) * 2 + 1;
 
-    const animate = function () {
+            raycaster.setFromCamera(pointer, camera);
+            const intersects = raycaster.intersectObject(cube, false);
+
+            // Act
+            if (intersects.length > 0) {
+                const point = new Point3D(
+                    intersects[0].point.x,
+                    intersects[0].point.y,
+                    intersects[0].point.z
+                );
+                drawPoint3D(point, scene);
+                controlPoints.current.push(point);
+            }
+        });
+    }
+    intializeScene();
+
+    function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
-    };
+    }
     animate();
 
     setOnDraw(() => {
@@ -94,6 +95,12 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
             BezierCurve(controlPoints.current, 0.01) as Point3D[],
             scene
         );
+        controlPoints.current = [];
+    });
+
+    setOnClear(() => {
+        scene.clear();
+        intializeScene();
         controlPoints.current = [];
     });
 
