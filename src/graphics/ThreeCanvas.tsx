@@ -15,6 +15,7 @@ export default function ThreeCanvas() {
         0.1,
         1000
     );
+    camera.position.z = 2;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer();
@@ -30,7 +31,11 @@ export default function ThreeCanvas() {
     });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-    camera.position.z = 2;
+    // Edges of the cube
+    const edgesGeometry = new THREE.EdgesGeometry(geometry);
+    const edgesMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+    const edges = new THREE.LineSegments(edgesGeometry, edgesMaterial);
+    scene.add(edges);
 
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
