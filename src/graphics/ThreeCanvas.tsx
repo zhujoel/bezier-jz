@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { BezierCurve } from "../geometry/3d/Bezier3D";
+import { Point3D } from "../geometry/3d/Point3D";
 
 /** ThreeJS */
 export default function ThreeCanvas() {
+    // Added points
+    const controlPoints = useRef<Point3D[]>([]);
+
     // Scene
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("lightblue");
@@ -59,15 +64,30 @@ export default function ThreeCanvas() {
 
         // Act
         if (intersects.length > 0) {
-            scene.add(
-                SphereMesh(
-                    intersects[0].point.x,
-                    intersects[0].point.y,
-                    intersects[0].point.z
-                )
+            const point = new Point3D(
+                intersects[0].point.x,
+                intersects[0].point.y,
+                intersects[0].point.z
             );
+            drawPoint(point, scene);
+            controlPoints.current.push(point);
         }
     });
+
+    function drawPoint(point: Point3D, scene: THREE.Scene) {
+        scene.add(SphereMesh(point.x, point.y, point.z));
+    }
+
+    function drawPoints(points: Point3D[], scene: THREE.Scene) {
+        for (var i = 0; i < points.length; ++i) {
+            drawPoint(points[i], scene);
+        }
+    }
+
+    function onDraw(scene: THREE.Scene) {
+        drawPoints(BezierCurve(controlPoints.current, 0.005), scene);
+        controlPoints.current = [];
+    }
 
     const animate = function () {
         requestAnimationFrame(animate);
@@ -75,7 +95,11 @@ export default function ThreeCanvas() {
     };
     animate();
 
-    return <></>;
+    return (
+        <div>
+            <button onClick={() => onDraw(scene)}>Draw 3D</button>
+        </div>
+    );
 }
 
 function SphereMesh(x: number, y: number, z: number): THREE.Mesh {

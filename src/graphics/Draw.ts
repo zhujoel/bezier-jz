@@ -1,6 +1,6 @@
-import { Point } from "../geometry/Point";
+import { Point2D } from "../geometry/2d/Point2D";
 
-export function drawPoint(point: Point, ctx: CanvasRenderingContext2D){
+export function drawPoint(point: Point2D, ctx: CanvasRenderingContext2D){
     ctx.strokeRect(point.x, point.y, 1, 1);
 }
 
@@ -13,7 +13,7 @@ type DrawOptions = {
  * @param points Points to draw.
  * @param options 
  */
-export function drawPoints(points: Point[], ctx: CanvasRenderingContext2D, options?: DrawOptions | undefined){
+export function drawPoints(points: Point2D[], ctx: CanvasRenderingContext2D, options?: DrawOptions | undefined){
     var promise = Promise.resolve();
 
     points.forEach((p) => {

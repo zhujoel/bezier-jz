@@ -12,7 +12,7 @@ export type CanvasProps = {
 export default function Canvas(props: CanvasProps) {
     const { width, height } = props;
 
-    const [isTwoDimensional, setIsTwoDimensional] = useState<boolean>(false);
+    const [isTwoDimensional, setIsTwoDimensional] = useState<boolean>(true);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const context = () => canvasRef.current.getContext("2d");
