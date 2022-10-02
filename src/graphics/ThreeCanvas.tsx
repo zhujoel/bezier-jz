@@ -32,7 +32,7 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
     renderer.setSize(width, height);
     useEffect(() => {
         document.getElementById("3d-canvas").replaceWith(renderer.domElement);
-    }, []);
+    }, [renderer.domElement]);
 
     function intializeScene() {
         // XYZ Axis

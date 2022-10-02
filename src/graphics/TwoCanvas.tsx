@@ -17,17 +17,13 @@ export default function TwoCanvas(props: TwoCanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const context = () => canvasRef.current.getContext("2d");
     useEffect(() => {
-        canvasRef.current.addEventListener("click", (e: MouseEvent) =>
-            onClick(e.offsetX, e.offsetY)
-        );
+        canvasRef.current.addEventListener("click", (e: MouseEvent) => {
+            drawPoint2D(new Point2D(e.offsetX, e.offsetY), context());
+            controlPoints.current.push(new Point2D(e.offsetX, e.offsetY));
+        });
     }, []);
 
     const controlPoints = useRef<Point2D[]>([]);
-
-    function onClick(x: number, y: number) {
-        drawPoint2D(new Point2D(x, y), context());
-        controlPoints.current.push(new Point2D(x, y));
-    }
 
     setOnClear(() => {
         context().clearRect(0, 0, width, height);
