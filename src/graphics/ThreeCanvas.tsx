@@ -106,7 +106,7 @@ function SphereMesh(x: number, y: number, z: number): THREE.Mesh {
     const circle = new THREE.Mesh(
         new THREE.SphereGeometry(),
         new THREE.MeshBasicMaterial({
-            color: 0xffffff * Math.random(),
+            color: 0x000000,
         })
     );
     circle.position.x = x;
