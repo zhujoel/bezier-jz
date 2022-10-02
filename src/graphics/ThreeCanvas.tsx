@@ -56,8 +56,8 @@ export default function ThreeCanvas() {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     document.addEventListener("click", (e: MouseEvent) => {
-        pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-        pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        pointer.x = (e.offsetX / window.innerWidth) * 2 - 1;
+        pointer.y = -(e.offsetY / window.innerHeight) * 2 + 1;
 
         raycaster.setFromCamera(pointer, camera);
         const intersects = raycaster.intersectObject(cube, false);
