@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { BezierCurve } from "../geometry/Bezier";
 import { Point } from "../geometry/Point";
 import { clear, drawPoint, drawPoints } from "./Draw";
+import ThreeCanvas from "./ThreeCanvas";
 
 export type CanvasProps = {
     width: number;
@@ -55,7 +56,7 @@ export default function Canvas(props: CanvasProps) {
                     height={height}
                 />
             ) : (
-                <div> </div>
+                <ThreeCanvas />
             )}
         </div>
     );
