@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { BezierCurve } from "../geometry/Bezier";
@@ -30,7 +30,9 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
     // Renderer
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
-    document.body.replaceChild(renderer.domElement, document.body.lastChild);
+    useEffect(() => {
+        document.getElementById("3d-canvas").replaceWith(renderer.domElement);
+    }, []);
 
     function intializeScene() {
         // XYZ Axis
@@ -104,5 +106,9 @@ export default function ThreeCanvas(props: ThreeCanvasProps) {
         controlPoints.current = [];
     });
 
-    return <div id="threeCanvas" />;
+    return (
+        <div>
+            <div id="3d-canvas"></div>
+        </div>
+    );
 }
