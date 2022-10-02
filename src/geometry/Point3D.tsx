@@ -1,6 +1,4 @@
-import React from "react";
-
-export class Point3D {
+export class Point3D implements Point {
     x: number;
     y: number;
     z: number;

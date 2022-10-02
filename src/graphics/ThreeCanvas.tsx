@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { BezierCurve } from "../geometry/3d/Bezier3D";
-import { Point3D } from "../geometry/3d/Point3D";
+import { BezierCurve } from "../geometry/Bezier";
+import { Point3D } from "../geometry/Point3D";
 
 /** ThreeJS */
 export default function ThreeCanvas() {
@@ -85,7 +85,10 @@ export default function ThreeCanvas() {
     }
 
     function onDraw(scene: THREE.Scene) {
-        drawPoints(BezierCurve(controlPoints.current, 0.005), scene);
+        drawPoints(
+            BezierCurve(controlPoints.current, 0.005) as Point3D[],
+            scene
+        );
         controlPoints.current = [];
     }
 

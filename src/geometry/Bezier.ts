@@ -1,11 +1,8 @@
-import React from "react";
-import { Point2D } from "./Point2D";
-
-export function Lerp(p0: Point2D, p1: Point2D, t: number): Point2D {
+export function Lerp(p0: Point, p1: Point, t: number): Point {
     return p0.Times(1 - t).Add(p1.Times(t));
 }
 
-export function DeCasteljau(points: Point2D[], t: number): Point2D {
+export function DeCasteljau(points: Point[], t: number): Point {
     if (points.length === 0) {
         throw new Error("Unable to compute on no point"); // Error state: should not happen
     }
@@ -26,9 +23,9 @@ export function DeCasteljau(points: Point2D[], t: number): Point2D {
  * @returns All points of the curve.
  */
 export function BezierCurve(
-    points: Point2D[],
+    points: Point[],
     step?: number | undefined
-): Point2D[] {
+): Point[] {
     const definedStep = step ?? 0.01;
     const bezier = [];
     for (var t = 0; t <= 1; t = Add(t, definedStep)) {

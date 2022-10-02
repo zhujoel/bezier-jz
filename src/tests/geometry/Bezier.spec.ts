@@ -1,7 +1,8 @@
-import { BezierCurve, DeCasteljau, Lerp } from "../../../geometry/2d/Bezier2D";
-import { Point2D } from "../../../geometry/2d/Point2D";
+import { BezierCurve, DeCasteljau, Lerp } from "../../geometry/Bezier";
+import { Point2D } from "../../geometry/Point2D";
+import { Point3D } from "../../geometry/Point3D";
 
-describe('Bézier 2D', () => {
+describe('Bézier', () => {
   it.each`
     p0 | p1 | t | result
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0} | ${new Point2D(3, 2)}
@@ -12,9 +13,20 @@ describe('Bézier 2D', () => {
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0.9} | ${new Point2D(4.8, 5.6)}
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${1} | ${new Point2D(5, 6)}
   `('should compute a lerp', ({ p0, p1, t, result }) => {
-    const lerp = Lerp(p0, p1, t);
+    const lerp = Lerp(p0, p1, t) as Point2D;
     expect(lerp.x).toBeCloseTo(result.x, 6);
     expect(lerp.y).toBeCloseTo(result.y, 6);
+  });
+
+  it.each`
+    p0 | p1 | t | result
+    ${new Point3D(3, 2, 0)} | ${new Point3D(5, 6, 0)} | ${1} | ${new Point3D(5, 6, 0)}
+    ${new Point3D(3, 2, 1)} | ${new Point3D(5, 6, 4)} | ${0.5} | ${new Point3D(4, 4, 2.5)}
+  `('should compute a lerp', ({ p0, p1, t, result }) => {
+    const lerp = Lerp(p0, p1, t) as Point3D;
+    expect(lerp.x).toBeCloseTo(result.x, 6);
+    expect(lerp.y).toBeCloseTo(result.y, 6);
+    expect(lerp.z).toBeCloseTo(result.z, 6);
   });
 
   it.each`
@@ -27,11 +39,13 @@ describe('Bézier 2D', () => {
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${0.9} | ${new Point2D(4.8, 5.6)}
     ${new Point2D(3, 2)} | ${new Point2D(5, 6)} | ${1} | ${new Point2D(5, 6)}
   `('should compute a point with De Casteljau\'s algorithm using two points', ({ p0, p1, t, result }) => {
-    var deCasteljau = DeCasteljau([p0, p1], t);
+    var deCasteljau = DeCasteljau([p0, p1], t) as Point2D;
     expect(deCasteljau.x).toBeCloseTo(result.x, 6);
     expect(deCasteljau.y).toBeCloseTo(result.y, 6);
     expect(deCasteljau).toEqual(Lerp(p0, p1, t));
   });
+
+
 
   it.each`
     p0 | p1 | p2 | t | result
@@ -54,7 +68,7 @@ describe('Bézier 2D', () => {
     ${new Point2D(50, 50)} | ${new Point2D(150, 150)} | ${new Point2D(50, 350)} | ${0.9} | ${new Point2D(68, 311)} 
     ${new Point2D(50, 50)} | ${new Point2D(150, 150)} | ${new Point2D(50, 350)} | ${1} | ${new Point2D(50, 350)}
   `('should compute a point with De Casteljau\'s algorithm using three points', ({p0, p1, p2, t, result}) => {
-    const deCasteljau = DeCasteljau([p0, p1, p2], t);
+    const deCasteljau = DeCasteljau([p0, p1, p2], t) as Point2D;
     expect(deCasteljau.x).toBeCloseTo(result.x, 6);
     expect(deCasteljau.y).toBeCloseTo(result.y, 6);
     expect(deCasteljau).toEqual(Lerp(Lerp(p0, p1, t), Lerp(p1, p2, t), t));
@@ -64,7 +78,7 @@ describe('Bézier 2D', () => {
     p0 | p1 | step | expectedX | expectedY
     ${new Point2D(10, 10)} | ${new Point2D(20, 20)} | ${0.1} | ${[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]} | ${[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]} 
   `('should compute a Bézier curve with two points', ({p0, p1, step, expectedX, expectedY}) => {
-    const curve = BezierCurve([p0, p1], step);
+    const curve = BezierCurve([p0, p1], step) as Point2D[];
     const n = curve.length;
     expect(n).toEqual(1 + 1 / step);
     for (var i = 0; i < n; ++i){
@@ -77,7 +91,7 @@ describe('Bézier 2D', () => {
     p0 | p1 | p2 | step | expectedX | expectedY
     ${new Point2D(10, 10)} | ${new Point2D(30, 30)} | ${new Point2D(10, 50)} | ${0.1} | ${[10, 13.6, 16.4, 18.4, 19.6, 20, 19.6, 18.4, 16.4, 13.6, 10]} | ${[10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50]} 
   `('should compute a Bézier curve with three points', ({p0, p1, p2, step, expectedX, expectedY}) => {
-    const curve = BezierCurve([p0, p1, p2], step);
+    const curve = BezierCurve([p0, p1, p2], step) as Point2D[];
     const n = curve.length;
     expect(n).toEqual(1 + 1 / step);
     for (var i = 0; i < n; ++i){

@@ -1,6 +1,4 @@
-import React from "react";
-
-export class Point2D {
+export class Point2D implements Point {
     x: number;
     y: number;
 

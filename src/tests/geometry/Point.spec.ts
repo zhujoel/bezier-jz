@@ -1,4 +1,4 @@
-import { Point2D } from "../../../geometry/2d/Point2D";
+import { Point2D } from "../../geometry/Point2D";
 
 describe('Point2D', () => {
   it('should add', () => {

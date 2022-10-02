@@ -1,4 +1,4 @@
-import { Point2D } from "../geometry/2d/Point2D";
+import { Point2D } from "../geometry/Point2D";
 
 export function drawPoint(point: Point2D, ctx: CanvasRenderingContext2D){
     ctx.strokeRect(point.x, point.y, 1, 1);
