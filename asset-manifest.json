@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/bezier-jz/static/js/main.bc10f27f.js",
+    "main.js": "/bezier-jz/static/js/main.92f356d3.js",
     "index.html": "/bezier-jz/index.html",
-    "main.bc10f27f.js.map": "/bezier-jz/static/js/main.bc10f27f.js.map"
+    "main.92f356d3.js.map": "/bezier-jz/static/js/main.92f356d3.js.map"
   },
   "entrypoints": [
-    "static/js/main.bc10f27f.js"
+    "static/js/main.92f356d3.js"
   ]
 }
