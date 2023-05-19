@@ -33,7 +33,7 @@ export default function Canvas(props: CanvasProps) {
                     Clear
                 </button>
                 <button onClick={() => setIsTwoDimensional(!isTwoDimensional)}>
-                    2D
+                    {isTwoDimensional ? "3D" : "2D"}
                 </button>
             </div>
             {isTwoDimensional ? (
