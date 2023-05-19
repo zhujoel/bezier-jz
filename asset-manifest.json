@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/bezier-jz/static/js/main.bc10f27f.js",
+    "index.html": "/bezier-jz/index.html",
+    "main.bc10f27f.js.map": "/bezier-jz/static/js/main.bc10f27f.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bc10f27f.js"
+  ]
+}
